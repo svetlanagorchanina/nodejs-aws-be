@@ -1,13 +1,12 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
-import productList from "../data/productList.json";
-import { withCorsHeaders } from "../utils/withCorsHeaders";
+import productList from "../../data/productList.json";
+import { withCorsHeaders } from "../../utils/withCorsHeaders";
 
-export const getProductsById: APIGatewayProxyHandler = async ({
-  pathParameters,
-}) => {
+export const getProductsById = async (event) => {
   try {
-    const product = productList.find(({ id }) => id === pathParameters.id);
+    const product = productList.find(
+      ({ id }) => id === event.pathParameters.id
+    );
 
     return withCorsHeaders(
       product

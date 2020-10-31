@@ -1,7 +1,7 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
-import productList from "../data/productList.json";
-import { withCorsHeaders } from "../utils/withCorsHeaders";
+import productList from "../../data/productList.json";
+import { withCorsHeaders } from "../../utils/withCorsHeaders";
 
 export const getProductsList: APIGatewayProxyHandler = async () =>
   withCorsHeaders(
