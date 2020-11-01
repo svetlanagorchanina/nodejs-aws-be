@@ -6,11 +6,13 @@
   "scripts": {
     "test": "jest",
     "invoke": "sls invoke local --function",
+    "swagger": "swagger-jsdoc -d swaggerDef.js",
     "deploy": "sls deploy"
   },
   "dependencies": {
     "serverless": "^2.9.0",
-    "source-map-support": "^0.5.10"
+    "source-map-support": "^0.5.10",
+    "swagger-jsdoc": "^5.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.1",
