@@ -1,6 +1,10 @@
 import "source-map-support/register";
 import productList from "../../data/productList.json";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
+import fetch from "node-fetch";
+
+const RANDOM_NUMBER_API =
+  "http://www.randomnumberapi.com/api/v1.0/random?min=1&max=100";
 
 /**
  * @swagger
@@ -67,12 +71,15 @@ export const getProductsById = async (event) => {
     const product = productList.find(
       ({ id }) => id === event.pathParameters.id
     );
+    const randomCounts = await fetch(RANDOM_NUMBER_API).then((res) =>
+      res.json()
+    );
 
     return withCorsHeaders(
       product
         ? {
             statusCode: 200,
-            body: JSON.stringify(product),
+            body: JSON.stringify({ ...product, count: randomCounts[0] }),
           }
         : {
             statusCode: 404,

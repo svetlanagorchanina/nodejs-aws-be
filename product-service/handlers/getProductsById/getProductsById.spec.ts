@@ -12,6 +12,7 @@ const mockProductList = [
   },
 ];
 
+jest.requireActual("node-fetch");
 jest.mock("../../data/productList.json", () => [
   {
     count: 1,
@@ -25,16 +26,15 @@ jest.mock("../../data/productList.json", () => [
 
 describe("#getProductsById", () => {
   it("should return product if it exists", async () => {
+    const targetProduct = mockProductList[0];
+    delete targetProduct.count;
+
     const response = await getProductsById({
-      pathParameters: { id: mockProductList[0].id },
+      pathParameters: { id: targetProduct.id },
     });
 
-    expect(response).toEqual(
-      withCorsHeaders({
-        statusCode: 200,
-        body: JSON.stringify(mockProductList[0]),
-      })
-    );
+    expect(response).toMatchObject(withCorsHeaders({ statusCode: 200 } as any));
+    expect(JSON.parse(response.body)).toMatchObject(targetProduct);
   });
 
   it("should return status 404 if product is not found", async () => {
