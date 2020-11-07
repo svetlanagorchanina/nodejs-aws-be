@@ -1,3 +1,4 @@
+import { APIGatewayProxyResult } from "aws-lambda";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
 
 describe("#getProductsList", () => {
@@ -25,6 +26,8 @@ describe("#getProductsList", () => {
 
     const response = await getProductsList();
 
-    expect(response).toMatchObject(withCorsHeaders({ statusCode: 404 } as any));
+    expect(response).toMatchObject(
+      withCorsHeaders({ statusCode: 404 } as APIGatewayProxyResult)
+    );
   });
 });
