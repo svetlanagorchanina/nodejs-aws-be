@@ -8,15 +8,13 @@ let pool;
 export const withPgConnection = (handler): APIGatewayProxyHandler => async (
   ...args
 ): Promise<APIGatewayProxyResult> => {
-  let client;
-
   if (!pool) {
     pool = new Pool(DB_OPTIONS);
   }
 
-  try {
-    client = await pool.connect();
+  const client = await pool.connect();
 
+  try {
     return await handler(client, ...args);
   } catch (err) {
     return withCorsHeaders({
