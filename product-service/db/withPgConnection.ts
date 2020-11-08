@@ -1,15 +1,22 @@
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
-import { Client } from "pg";
+import { Pool } from "pg";
 import { withCorsHeaders } from "../utils/withCorsHeaders";
 import { DB_OPTIONS } from "./options";
+
+let pool;
 
 export const withPgConnection = (handler): APIGatewayProxyHandler => async (
   ...args
 ): Promise<APIGatewayProxyResult> => {
-  const client = new Client(DB_OPTIONS);
-  await client.connect();
+  let client;
+
+  if (!pool) {
+    pool = new Pool(DB_OPTIONS);
+  }
 
   try {
+    client = await pool.connect();
+
     return await handler(client, ...args);
   } catch (err) {
     return withCorsHeaders({
@@ -20,6 +27,6 @@ export const withPgConnection = (handler): APIGatewayProxyHandler => async (
       }),
     });
   } finally {
-    client.end();
+    client.release();
   }
 };

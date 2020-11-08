@@ -18,23 +18,33 @@ export const createProduct: APIGatewayProxyHandler = withEventLog(
     const { title, description = "", price, src = "", count } = JSON.parse(
       event.body
     );
+    let productId;
 
     if (!isProductValid({ title, price, count })) {
-      return {
+      return withCorsHeaders({
         statusCode: 400,
         body: JSON.stringify({ message: "Product is not valid" }),
-      };
+      });
+    }
+
+    try {
+      client.query("BEGIN");
+      const {
+        rows: [{ id }],
+      } = await client.query(
+        productsQuery.addRow({ title, description, price, src })
+      );
+      productId = id;
+      await client.query(stocksQuery.addRow({ id, count }));
+      client.query("COMMIT");
+    } catch (e) {
+      client.query("ROLLBACK");
+      throw e;
     }
 
     const {
-      rows: [{ id }],
-    } = await client.query(
-      productsQuery.addRow({ title, description, price, src })
-    );
-    await client.query(stocksQuery.addRow({ id, count }));
-    const {
       rows: [product],
-    } = await client.query(productsQuery.getById(id));
+    } = await client.query(productsQuery.getById(productId));
 
     return withCorsHeaders({
       statusCode: 200,
