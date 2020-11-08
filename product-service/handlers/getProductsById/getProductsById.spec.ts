@@ -13,7 +13,6 @@ const mockProductList = [
   },
 ];
 
-jest.requireActual("node-fetch");
 jest.mock("../../data/productList.json", () => [
   {
     count: 1,

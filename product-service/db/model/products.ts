@@ -24,10 +24,18 @@ const insertInitData = `
         ('Сinnamon', 'I wish you a Marry Christmas!', 80, 'https://images.pexels.com/photos/40887/anise-aroma-aromatic-brown-40887.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500');
 `;
 
-const getAll = "select * from products";
+const getAll = "select * from products;";
+
+const getAllWithCount =
+  "select products.*, stocks.count from products left join stocks on products.id = stocks.product_id";
+
+const getById = (id: string) =>
+  `${getAllWithCount} where products.id = '${id}';`;
 
 export const productsQuery = {
   createTable,
   insertInitData,
   getAll,
+  getAllWithCount,
+  getById,
 };

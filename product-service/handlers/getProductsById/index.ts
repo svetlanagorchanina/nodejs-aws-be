@@ -1,10 +1,7 @@
 import "source-map-support/register";
-import productList from "../../data/productList.json";
+import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
-import fetch from "node-fetch";
-
-const RANDOM_NUMBER_API =
-  "http://www.randomnumberapi.com/api/v1.0/random?min=1&max=100";
+import { withPgConnection } from "../../db/withPgConnection";
 
 /**
  * @swagger
@@ -66,20 +63,16 @@ const RANDOM_NUMBER_API =
  *         schema:
  *            $ref: "#/definitions/Error"
  */
-export const getProductsById = async (event) => {
+export const getProductsById = withPgConnection(async (client, event) => {
   try {
-    const product = productList.find(
-      ({ id }) => id === event.pathParameters.id
-    );
-    const randomCounts = await fetch(RANDOM_NUMBER_API).then((res) =>
-      res.json()
-    );
+    const id = event.pathParameters.id;
+    const { rows: product } = await client.query(productsQuery.getById(id));
 
     return withCorsHeaders(
       product
         ? {
             statusCode: 200,
-            body: JSON.stringify({ ...product, count: randomCounts[0] }),
+            body: JSON.stringify(product),
           }
         : {
             statusCode: 404,
@@ -94,4 +87,4 @@ export const getProductsById = async (event) => {
       }),
     });
   }
-};
+});
