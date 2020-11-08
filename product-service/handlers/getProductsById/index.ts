@@ -49,7 +49,6 @@ import { withEventLog } from "../../utils/withEventLog";
  *         description: Product id
  *         required: true
  *         type: string
- *         default: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
  *         in: path
  *     responses:
  *       200:
@@ -68,7 +67,9 @@ import { withEventLog } from "../../utils/withEventLog";
 export const getProductsById: APIGatewayProxyHandler = withEventLog(
   withPgConnection(async (client, event) => {
     const id = event.pathParameters.id;
-    const { rows: product } = await client.query(productsQuery.getById(id));
+    const {
+      rows: [product],
+    } = await client.query(productsQuery.getById(id));
 
     return withCorsHeaders(
       product

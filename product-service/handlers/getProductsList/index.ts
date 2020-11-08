@@ -55,6 +55,10 @@ import { withEventLog } from "../../utils/withEventLog";
  *          description: Product list not found
  *          schema:
  *              $ref: "#/definitions/Error"
+ *       500:
+ *          description: Something went wrong
+ *          schema:
+ *              $ref: "#/definitions/Error"
  */
 export const getProductsList: APIGatewayProxyHandler = withEventLog(
   withPgConnection(async (client) => {
