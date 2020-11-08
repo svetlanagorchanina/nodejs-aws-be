@@ -4,6 +4,7 @@ import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { withPgConnection } from "../../db/withPgConnection";
 import { APIGatewayProxyHandler } from "aws-lambda";
 import { stocksQuery } from "../../db/model/stocks";
+import { withEventLog } from "../../utils/withEventLog";
 
 const isProductValid = ({ title, price, count }) =>
   title &&
@@ -12,8 +13,8 @@ const isProductValid = ({ title, price, count }) =>
   price >= 0 &&
   Number.isInteger(price);
 
-export const createProduct: APIGatewayProxyHandler = withPgConnection(
-  async (client, event) => {
+export const createProduct: APIGatewayProxyHandler = withEventLog(
+  withPgConnection(async (client, event) => {
     const { title, description = "", price, src = "", count } = JSON.parse(
       event.body
     );
@@ -39,5 +40,6 @@ export const createProduct: APIGatewayProxyHandler = withPgConnection(
       statusCode: 200,
       body: JSON.stringify(product),
     });
-  }
+  }),
+  "createProduct"
 );

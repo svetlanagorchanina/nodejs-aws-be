@@ -3,6 +3,7 @@ import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { withPgConnection } from "../../db/withPgConnection";
 import { APIGatewayProxyHandler } from "aws-lambda";
+import { withEventLog } from "../../utils/withEventLog";
 
 /**
  * @swagger
@@ -64,8 +65,8 @@ import { APIGatewayProxyHandler } from "aws-lambda";
  *         schema:
  *            $ref: "#/definitions/Error"
  */
-export const getProductsById: APIGatewayProxyHandler = withPgConnection(
-  async (client, event) => {
+export const getProductsById: APIGatewayProxyHandler = withEventLog(
+  withPgConnection(async (client, event) => {
     const id = event.pathParameters.id;
     const { rows: product } = await client.query(productsQuery.getById(id));
 
@@ -80,5 +81,6 @@ export const getProductsById: APIGatewayProxyHandler = withPgConnection(
             body: JSON.stringify({ message: "Product not found" }),
           }
     );
-  }
+  }),
+  "getProductsById"
 );

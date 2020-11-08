@@ -3,6 +3,7 @@ import "source-map-support/register";
 import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { withPgConnection } from "../../db/withPgConnection";
+import { withEventLog } from "../../utils/withEventLog";
 
 /**
  * @swagger
@@ -55,8 +56,8 @@ import { withPgConnection } from "../../db/withPgConnection";
  *          schema:
  *              $ref: "#/definitions/Error"
  */
-export const getProductsList: APIGatewayProxyHandler = withPgConnection(
-  async (client) => {
+export const getProductsList: APIGatewayProxyHandler = withEventLog(
+  withPgConnection(async (client) => {
     const { rows: products } = await client.query(
       productsQuery.getAllWithCount
     );
@@ -72,5 +73,6 @@ export const getProductsList: APIGatewayProxyHandler = withPgConnection(
             body: JSON.stringify({ message: "Product list not found" }),
           }
     );
-  }
+  }),
+  "getProductsList"
 );
