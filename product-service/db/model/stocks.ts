@@ -1,3 +1,5 @@
+import { Product } from "../../model/Product";
+
 const createTable = `
     drop table if exists stocks;
 
@@ -27,7 +29,12 @@ const insertInitData = `
             select id, 3 from products WHERE title='Сinnamon';
 `;
 
+const addRow = ({ id, count }: Pick<Product, "id" | "count">) => `
+    insert into stocks (product_id, count) values ('${id}', ${count});
+`;
+
 export const stocksQuery = {
   createTable,
   insertInitData,
+  addRow,
 };

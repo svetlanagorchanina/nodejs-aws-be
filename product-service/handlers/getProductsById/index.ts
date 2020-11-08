@@ -2,6 +2,7 @@ import "source-map-support/register";
 import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { withPgConnection } from "../../db/withPgConnection";
+import { APIGatewayProxyHandler } from "aws-lambda";
 
 /**
  * @swagger
@@ -63,8 +64,8 @@ import { withPgConnection } from "../../db/withPgConnection";
  *         schema:
  *            $ref: "#/definitions/Error"
  */
-export const getProductsById = withPgConnection(async (client, event) => {
-  try {
+export const getProductsById: APIGatewayProxyHandler = withPgConnection(
+  async (client, event) => {
     const id = event.pathParameters.id;
     const { rows: product } = await client.query(productsQuery.getById(id));
 
@@ -79,12 +80,5 @@ export const getProductsById = withPgConnection(async (client, event) => {
             body: JSON.stringify({ message: "Product not found" }),
           }
     );
-  } catch (e) {
-    return withCorsHeaders({
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Something went wrong. Please try again later.",
-      }),
-    });
   }
-});
+);

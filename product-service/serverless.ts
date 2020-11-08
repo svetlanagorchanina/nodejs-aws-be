@@ -57,6 +57,18 @@ const serverlessConfiguration: Serverless = {
     pgInit: {
       handler: "handler.pgInit",
     },
+    createProduct: {
+      handler: "handler.createProduct",
+      events: [
+        {
+          http: {
+            method: "post",
+            path: "products",
+            cors: true,
+          },
+        },
+      ],
+    },
   },
 };
 

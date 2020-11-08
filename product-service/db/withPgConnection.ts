@@ -1,5 +1,6 @@
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
 import { Client } from "pg";
+import { withCorsHeaders } from "../utils/withCorsHeaders";
 import { DB_OPTIONS } from "./options";
 
 export const withPgConnection = (handler): APIGatewayProxyHandler => async (
@@ -11,7 +12,13 @@ export const withPgConnection = (handler): APIGatewayProxyHandler => async (
   try {
     return await handler(client, ...args);
   } catch (err) {
-    console.error("Error during database request executing:", err);
+    return withCorsHeaders({
+      statusCode: 500,
+      body: JSON.stringify({
+        message:
+          err?.message || "Something went wrong. Please try again later.",
+      }),
+    });
   } finally {
     client.end();
   }

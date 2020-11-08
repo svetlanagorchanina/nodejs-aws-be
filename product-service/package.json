@@ -7,7 +7,8 @@
     "test": "jest",
     "invoke": "sls invoke local --function",
     "swagger": "swagger-jsdoc -d swaggerDef.js",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "deploy:fn": "sls deploy function -f"
   },
   "dependencies": {
     "pg": "^8.4.2",

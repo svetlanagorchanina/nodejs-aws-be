@@ -1,3 +1,5 @@
+import { Product } from "../../model/Product";
+
 const createTable = `
     create extension if not exists "uuid-ossp";
 
@@ -32,10 +34,22 @@ const getAllWithCount =
 const getById = (id: string) =>
   `${getAllWithCount} where products.id = '${id}';`;
 
+const addRow = ({
+  title,
+  description,
+  price,
+  src,
+}: Omit<Product, "id" | "count">) => `
+  insert into products (title, description, price, src)
+    values ('${title}', '${description}', ${price}, '${src}')
+    returning id;
+`;
+
 export const productsQuery = {
   createTable,
   insertInitData,
   getAll,
   getAllWithCount,
   getById,
+  addRow,
 };
