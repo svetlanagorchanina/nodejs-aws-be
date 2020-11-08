@@ -1,12 +1,16 @@
-import { productsQuery } from "../db/model/products";
-import { stocksQuery } from "../db/model/stocks";
-import { withPgConnection } from "../db/withPgConnection";
-import { withEventLog } from "../utils/withEventLog";
+import { productsQuery } from "../../db/model/products";
+import { stocksQuery } from "../../db/model/stocks";
+import { withPgConnection } from "../../db/withPgConnection";
+import { withEventLog } from "../../utils/withEventLog";
 
 export const pgInit = withEventLog(
   withPgConnection(async (client) => {
+    await client.query(stocksQuery.dropTable);
+    await client.query(productsQuery.dropTable);
+
     await client.query(productsQuery.createTable);
     await client.query(stocksQuery.createTable);
+
     await client.query(productsQuery.insertInitData);
     await client.query(stocksQuery.insertInitData);
 

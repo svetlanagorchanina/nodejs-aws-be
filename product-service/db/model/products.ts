@@ -1,9 +1,9 @@
 import { Product } from "../../model/Product";
 
+const dropTable = "drop table if exists products;";
+
 const createTable = `
     create extension if not exists "uuid-ossp";
-
-    drop table if exists products;
 
     create table products (
         id uuid primary key default uuid_generate_v4(),
@@ -46,6 +46,7 @@ const addRow = ({
 `;
 
 export const productsQuery = {
+  dropTable,
   createTable,
   insertInitData,
   getAll,

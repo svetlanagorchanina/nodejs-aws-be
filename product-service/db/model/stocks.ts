@@ -1,8 +1,8 @@
 import { Product } from "../../model/Product";
 
-const createTable = `
-    drop table if exists stocks;
+const dropTable = "drop table if exists stocks;";
 
+const createTable = `
     create table stocks (
         product_id uuid primary key,
         count integer,
@@ -34,6 +34,7 @@ const addRow = ({ id, count }: Pick<Product, "id" | "count">) => `
 `;
 
 export const stocksQuery = {
+  dropTable,
   createTable,
   insertInitData,
   addRow,
