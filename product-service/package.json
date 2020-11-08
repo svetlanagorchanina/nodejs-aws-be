@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "node-fetch": "^2.6.1",
+    "pg": "^8.4.2",
     "serverless": "^2.9.0",
     "source-map-support": "^0.5.10",
     "swagger-jsdoc": "^5.0.0"

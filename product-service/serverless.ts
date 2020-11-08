@@ -3,9 +3,6 @@ import type { Serverless } from "serverless/aws";
 const serverlessConfiguration: Serverless = {
   service: {
     name: "product-service",
-    // app and org for use with dashboard.serverless.com
-    // app: your-app-name,
-    // org: your-org-name,
   },
   frameworkVersion: "2",
   custom: {
@@ -14,7 +11,6 @@ const serverlessConfiguration: Serverless = {
       includeModules: true,
     },
   },
-  // Add the serverless-webpack plugin
   plugins: ["serverless-webpack"],
   provider: {
     name: "aws",
@@ -26,6 +22,11 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
+      PG_HOST: "PG_HOST",
+      PG_PORT: "PG_PORT",
+      PG_DATABASE: "PG_DATABASE",
+      PG_USERNAME: "PG_USERNAME",
+      PG_PASSWORD: "PG_PASSWORD",
     },
   },
   functions: {
@@ -52,6 +53,9 @@ const serverlessConfiguration: Serverless = {
           },
         },
       ],
+    },
+    pgInit: {
+      handler: "handler.pgInit",
     },
   },
 };
