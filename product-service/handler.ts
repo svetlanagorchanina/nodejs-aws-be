@@ -1,4 +1,4 @@
 export * from "./handlers/getProductsList";
 export * from "./handlers/getProductsById";
-export * from "./handlers/pgInit";
+export * from "./handlers/dbInit";
 export * from "./handlers/createProduct";

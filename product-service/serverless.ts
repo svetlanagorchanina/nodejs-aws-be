@@ -54,8 +54,8 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
-    pgInit: {
-      handler: "handler.pgInit",
+    dbInit: {
+      handler: "handler.dbInit",
     },
     createProduct: {
       handler: "handler.createProduct",

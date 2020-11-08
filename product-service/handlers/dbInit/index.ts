@@ -3,7 +3,7 @@ import { stocksQuery } from "../../db/model/stocks";
 import { withPgConnection } from "../../db/withPgConnection";
 import { withEventLog } from "../../utils/withEventLog";
 
-export const pgInit = withEventLog(
+export const dbInit = withEventLog(
   withPgConnection(async (client) => {
     await client.query(stocksQuery.dropTable);
     await client.query(productsQuery.dropTable);
@@ -17,5 +17,5 @@ export const pgInit = withEventLog(
     const { rows: products } = await client.query(productsQuery.getAll);
     console.log("Products:", products);
   }),
-  "pgInit"
+  "dbInit"
 );
