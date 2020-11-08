@@ -2,7 +2,6 @@ import "source-map-support/register";
 import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { withPgConnection } from "../../db/withPgConnection";
-import { APIGatewayProxyHandler } from "aws-lambda";
 import { withEventLog } from "../../utils/withEventLog";
 
 /**
@@ -64,7 +63,7 @@ import { withEventLog } from "../../utils/withEventLog";
  *         schema:
  *            $ref: "#/definitions/Error"
  */
-export const getProductsById: APIGatewayProxyHandler = withEventLog(
+export const getProductsById = withEventLog(
   withPgConnection(async (client, event) => {
     const id = event.pathParameters.id;
     const {
