@@ -29,9 +29,7 @@ const insertInitData = `
             select id, 3 from products WHERE title='Сinnamon';
 `;
 
-const addRow = ({ id, count }: Pick<Product, "id" | "count">) => `
-    insert into stocks (product_id, count) values ('${id}', ${count});
-`;
+const addRow = "insert into stocks (product_id, count) values ($1, $2);";
 
 export const stocksQuery = {
   dropTable,

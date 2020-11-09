@@ -31,17 +31,11 @@ const getAll = "select * from products;";
 const getAllWithCount =
   "select products.*, stocks.count from products left join stocks on products.id = stocks.product_id";
 
-const getById = (id: string) =>
-  `${getAllWithCount} where products.id = '${id}';`;
+const getById = `${getAllWithCount} where products.id = $1;`;
 
-const addRow = ({
-  title,
-  description,
-  price,
-  src,
-}: Omit<Product, "id" | "count">) => `
+const addRow = `
   insert into products (title, description, price, src)
-    values ('${title}', '${description}', ${price}, '${src}')
+    values ($1, $2, $3, $4)
     returning id;
 `;
 

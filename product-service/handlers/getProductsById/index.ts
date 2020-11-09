@@ -68,7 +68,7 @@ export const getProductsById = withEventLog(
     const id = event.pathParameters.id;
     const {
       rows: [product],
-    } = await client.query(productsQuery.getById(id));
+    } = await client.query(productsQuery.getById, [id]);
 
     return withCorsHeaders(
       product

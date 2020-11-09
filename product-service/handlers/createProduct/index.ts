@@ -102,11 +102,14 @@ export const createProduct: APIGatewayProxyHandler = withEventLog(
       client.query("BEGIN");
       const {
         rows: [{ id }],
-      } = await client.query(
-        productsQuery.addRow({ title, description, price, src })
-      );
+      } = await client.query(productsQuery.addRow, [
+        title,
+        description,
+        price,
+        src,
+      ]);
       productId = id;
-      await client.query(stocksQuery.addRow({ id, count }));
+      await client.query(stocksQuery.addRow, [id, count]);
       client.query("COMMIT");
     } catch (e) {
       client.query("ROLLBACK");
@@ -115,7 +118,7 @@ export const createProduct: APIGatewayProxyHandler = withEventLog(
 
     const {
       rows: [product],
-    } = await client.query(productsQuery.getById(productId));
+    } = await client.query(productsQuery.getById, [productId]);
 
     return withCorsHeaders({
       statusCode: 200,
