@@ -7,7 +7,8 @@ module.exports = {
   apis: [
     "./handlers/getProductsList/index.ts",
     "./handlers/getProductsById/index.ts",
+    "./handlers/createProduct/index.ts",
   ],
-  host: "rpjepkiu2b.execute-api.eu-west-1.amazonaws.com",
-  basePath: "/prod",
+  host: "fgkaarac1j.execute-api.eu-west-1.amazonaws.com",
+  basePath: "/dev",
 };

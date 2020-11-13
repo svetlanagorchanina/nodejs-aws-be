@@ -7,7 +7,10 @@ describe("#getProductsList", () => {
   });
 
   it("should return products list if it exists", async () => {
-    jest.mock("../../data/productList.json", () => []);
+    jest.mock("../../db/withPgConnection", () => ({
+      withPgConnection: (handler) => (...args) =>
+        handler({ query: async () => ({ rows: [] }) }, ...args),
+    }));
     const { getProductsList } = require(".");
 
     const response = await getProductsList();
@@ -21,7 +24,10 @@ describe("#getProductsList", () => {
   });
 
   it("should return error if product list is undefined", async () => {
-    jest.mock("../../data/productList.json", () => undefined);
+    jest.mock("../../db/withPgConnection", () => ({
+      withPgConnection: (handler) => (...args) =>
+        handler({ query: async () => ({ rows: undefined }) }, ...args),
+    }));
     const { getProductsList } = require(".");
 
     const response = await getProductsList();

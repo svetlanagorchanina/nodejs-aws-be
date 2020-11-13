@@ -1,10 +1,8 @@
 import "source-map-support/register";
-import productList from "../../data/productList.json";
+import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
-import fetch from "node-fetch";
-
-const RANDOM_NUMBER_API =
-  "http://www.randomnumberapi.com/api/v1.0/random?min=1&max=100";
+import { withPgConnection } from "../../db/withPgConnection";
+import { withEventLog } from "../../utils/withEventLog";
 
 /**
  * @swagger
@@ -50,7 +48,6 @@ const RANDOM_NUMBER_API =
  *         description: Product id
  *         required: true
  *         type: string
- *         default: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
  *         in: path
  *     responses:
  *       200:
@@ -66,32 +63,27 @@ const RANDOM_NUMBER_API =
  *         schema:
  *            $ref: "#/definitions/Error"
  */
-export const getProductsById = async (event) => {
-  try {
-    const product = productList.find(
-      ({ id }) => id === event.pathParameters.id
-    );
-    const randomCounts = await fetch(RANDOM_NUMBER_API).then((res) =>
-      res.json()
-    );
+export const getProductsById = withEventLog(
+  withPgConnection(async (client, event) => {
+    const id = event.pathParameters.id;
+    let product;
+
+    try {
+      const { rows } = await client.query(productsQuery.getById, [id]);
+      product = rows[0];
+    } catch (error) {}
 
     return withCorsHeaders(
       product
         ? {
             statusCode: 200,
-            body: JSON.stringify({ ...product, count: randomCounts[0] }),
+            body: JSON.stringify(product),
           }
         : {
             statusCode: 404,
             body: JSON.stringify({ message: "Product not found" }),
           }
     );
-  } catch (e) {
-    return withCorsHeaders({
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Something went wrong. Please try again later.",
-      }),
-    });
-  }
-};
+  }),
+  "getProductsById"
+);

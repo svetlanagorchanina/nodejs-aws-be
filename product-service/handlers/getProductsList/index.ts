@@ -1,7 +1,9 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
-import productList from "../../data/productList.json";
+import { productsQuery } from "../../db/model/products";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
+import { withPgConnection } from "../../db/withPgConnection";
+import { withEventLog } from "../../utils/withEventLog";
 
 /**
  * @swagger
@@ -53,16 +55,28 @@ import { withCorsHeaders } from "../../utils/withCorsHeaders";
  *          description: Product list not found
  *          schema:
  *              $ref: "#/definitions/Error"
+ *       500:
+ *          description: Something went wrong
+ *          schema:
+ *              $ref: "#/definitions/Error"
  */
-export const getProductsList: APIGatewayProxyHandler = async () =>
-  withCorsHeaders(
-    productList
-      ? {
-          statusCode: 200,
-          body: JSON.stringify(productList),
-        }
-      : {
-          statusCode: 404,
-          body: JSON.stringify({ message: "Product list not found" }),
-        }
-  );
+export const getProductsList: APIGatewayProxyHandler = withEventLog(
+  withPgConnection(async (client) => {
+    const { rows: products } = await client.query(
+      productsQuery.getAllWithCount
+    );
+
+    return withCorsHeaders(
+      products
+        ? {
+            statusCode: 200,
+            body: JSON.stringify(products),
+          }
+        : {
+            statusCode: 404,
+            body: JSON.stringify({ message: "Product list not found" }),
+          }
+    );
+  }),
+  "getProductsList"
+);

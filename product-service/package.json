@@ -7,10 +7,11 @@
     "test": "jest",
     "invoke": "sls invoke local --function",
     "swagger": "swagger-jsdoc -d swaggerDef.js",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "deploy:fn": "sls deploy function -f"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
+    "pg": "^8.4.2",
     "serverless": "^2.9.0",
     "source-map-support": "^0.5.10",
     "swagger-jsdoc": "^5.0.0"
