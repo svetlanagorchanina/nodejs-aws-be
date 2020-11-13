@@ -66,9 +66,12 @@ import { withEventLog } from "../../utils/withEventLog";
 export const getProductsById = withEventLog(
   withPgConnection(async (client, event) => {
     const id = event.pathParameters.id;
-    const {
-      rows: [product],
-    } = await client.query(productsQuery.getById, [id]);
+    let product;
+
+    try {
+      const { rows } = await client.query(productsQuery.getById, [id]);
+      product = rows[0];
+    } catch (error) {}
 
     return withCorsHeaders(
       product
