@@ -1,8 +1,8 @@
 import "source-map-support/register";
 import { productsQuery } from "../../db/model/products";
-import { withCorsHeaders } from "../../utils/withCorsHeaders";
+import { withCorsHeaders } from "../../../utils/withCorsHeaders";
 import { withPgConnection } from "../../db/withPgConnection";
-import { withEventLog } from "../../utils/withEventLog";
+import { withEventLog } from "../../../utils/withEventLog";
 
 /**
  * @swagger

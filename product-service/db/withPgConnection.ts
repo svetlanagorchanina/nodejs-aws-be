@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
 import { Pool } from "pg";
-import { withCorsHeaders } from "../utils/withCorsHeaders";
+import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { DB_OPTIONS } from "./options";
 
 let pool;

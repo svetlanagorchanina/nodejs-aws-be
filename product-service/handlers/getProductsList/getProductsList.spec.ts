@@ -1,5 +1,5 @@
 import { APIGatewayProxyResult } from "aws-lambda";
-import { withCorsHeaders } from "../../utils/withCorsHeaders";
+import { withCorsHeaders } from "../../../utils/withCorsHeaders";
 
 describe("#getProductsList", () => {
   beforeEach(() => {

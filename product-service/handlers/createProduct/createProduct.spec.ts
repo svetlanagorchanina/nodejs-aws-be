@@ -1,4 +1,4 @@
-import { withCorsHeaders } from "../../utils/withCorsHeaders";
+import { withCorsHeaders } from "../../../utils/withCorsHeaders";
 import { APIGatewayProxyResult } from "aws-lambda";
 
 const newProduct = {

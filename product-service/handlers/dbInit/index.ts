@@ -1,7 +1,7 @@
 import { productsQuery } from "../../db/model/products";
 import { stocksQuery } from "../../db/model/stocks";
 import { withPgConnection } from "../../db/withPgConnection";
-import { withEventLog } from "../../utils/withEventLog";
+import { withEventLog } from "../../../utils/withEventLog";
 
 export const dbInit = withEventLog(
   withPgConnection(async (client) => {
