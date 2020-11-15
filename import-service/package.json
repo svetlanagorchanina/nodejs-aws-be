@@ -4,11 +4,15 @@
   "description": "Serverless webpack example using Typescript",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "invoke": "sls invoke local --function",
+    "deploy": "sls deploy",
+    "deploy:fn": "sls deploy function -f"
   },
   "dependencies": {
     "aws-sdk": "^2.792.0",
     "csv-parser": "^2.3.3",
+    "serverless": "^2.11.1",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
