@@ -58,6 +58,24 @@ const serverlessConfiguration: Serverless = {
         },
       ],
     },
+    importFileParser: {
+      handler: "handler.importFileParser",
+      events: [
+        {
+          s3: {
+            bucket: "${self:provider.environment.BUCKET}",
+            event: "s3:ObjectCreated:*",
+            rules: [
+              {
+                prefix: "uploaded/",
+                suffix: "",
+              },
+            ],
+            existing: true,
+          },
+        },
+      ],
+    },
   },
 };
 
