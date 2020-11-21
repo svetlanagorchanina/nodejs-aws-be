@@ -31,7 +31,8 @@ const serverlessConfiguration: Serverless = {
       SNS_ARN: {
         Ref: "SNSTopic",
       },
-      EMAIL: "",
+      SNS_OK_EMAIL: "",
+      SNS_ERROR_EMAIL: "",
     },
     iamRoleStatements: [
       {
@@ -80,13 +81,29 @@ const serverlessConfiguration: Serverless = {
           TopicName: "createProductTopic",
         },
       },
-      SNSSubscription: {
+      SNSOkSubscription: {
         Type: "AWS::SNS::Subscription",
         Properties: {
-          Endpoint: "${self:provider.environment.EMAIL}",
+          Endpoint: "${self:provider.environment.SNS_OK_EMAIL}",
           Protocol: "email",
           TopicArn: {
             Ref: "SNSTopic",
+          },
+          FilterPolicy: {
+            status: ["OK"],
+          },
+        },
+      },
+      SNSErrorSubscription: {
+        Type: "AWS::SNS::Subscription",
+        Properties: {
+          Endpoint: "${self:provider.environment.SNS_ERROR_EMAIL}",
+          Protocol: "email",
+          TopicArn: {
+            Ref: "SNSTopic",
+          },
+          FilterPolicy: {
+            status: ["ERROR"],
           },
         },
       },

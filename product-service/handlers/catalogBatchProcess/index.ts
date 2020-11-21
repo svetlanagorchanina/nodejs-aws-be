@@ -5,42 +5,57 @@ import { withPgConnection } from "../../db/withPgConnection";
 
 const { REGION, SNS_ARN } = process.env;
 
+type CreatProductStatus = "OK" | "ERROR";
+
 export const catalogBatchProcess = withPgConnection(async (client, event) => {
-  const sns = new SNS({ region: REGION });
   const products = event.Records.map(({ body }) => JSON.parse(body));
 
-  try {
-    await Promise.all(
-      products.map((product) => addProductToDb(client, product))
-    );
+  await Promise.all(
+    products.map(async (product) => {
+      let status: CreatProductStatus = "OK";
 
-    await sns
-      .publish(
-        {
-          Subject: "New products announcement",
-          Message: JSON.stringify(products),
-          TopicArn: SNS_ARN,
-        },
-        (error, data) => {
-          if (error) {
-            console.log("SNS error: ", error);
-            return;
-          }
+      try {
+        await addProductToDb(client, product);
+      } catch (error) {
+        status = "ERROR";
+        console.log("DB error:", error?.message);
+      }
 
-          console.log("Products were sent to SNS:", data);
-        }
-      )
-      .promise();
-  } catch (error) {
-    console.log("Error", error?.message || "Something went wrong");
-  }
+      try {
+        await publishMessageToSNS(product, status);
+      } catch (error) {
+        console.log("SNS error: ", error);
+      }
+    })
+  );
 });
+
+const publishMessageToSNS = ({ title }, status: CreatProductStatus) => {
+  const sns = new SNS({ region: REGION });
+
+  return sns
+    .publish({
+      Subject: "New products announcement",
+      Message:
+        status === "OK"
+          ? `The following product was added to Christmas store:\n${title}`
+          : `The following product was not saved:\n${title}`,
+      TopicArn: SNS_ARN,
+      MessageAttributes: {
+        status: {
+          DataType: "String",
+          StringValue: status,
+        },
+      },
+    })
+    .promise();
+};
 
 const addProductToDb = async (client, product) => {
   const { title, price, count, description, src } = formatProduct(product);
 
   if (!isProductValid({ title, price, count })) {
-    throw new Error("Product is not valid");
+    throw new Error(`Product ${title} is not valid`);
   }
 
   const {
