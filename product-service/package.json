@@ -11,6 +11,7 @@
     "deploy:fn": "sls deploy function -f"
   },
   "dependencies": {
+    "aws-sdk": "^2.797.0",
     "pg": "^8.4.2",
     "serverless": "^2.9.0",
     "source-map-support": "^0.5.10",
