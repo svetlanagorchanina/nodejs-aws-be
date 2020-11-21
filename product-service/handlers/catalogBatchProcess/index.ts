@@ -24,7 +24,7 @@ export const catalogBatchProcess = withPgConnection(async (client, event) => {
       try {
         await publishMessageToSNS(product, status);
       } catch (error) {
-        console.log("SNS error: ", error);
+        console.log("SNS error:", error);
       }
     })
   );
