@@ -11,7 +11,7 @@ const serverlessConfiguration: Serverless = {
       includeModules: true,
     },
   },
-  plugins: ["serverless-webpack"],
+  plugins: ["serverless-webpack", "serverless-dotenv-plugin"],
   provider: {
     name: "aws",
     runtime: "nodejs12.x",
@@ -22,17 +22,9 @@ const serverlessConfiguration: Serverless = {
     },
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
-      PG_HOST: "PG_HOST",
-      PG_PORT: "PG_PORT",
-      PG_DATABASE: "PG_DATABASE",
-      PG_USERNAME: "PG_USERNAME",
-      PG_PASSWORD: "PG_PASSWORD",
-      REGION: "eu-west-1",
       SNS_ARN: {
         Ref: "SNSTopic",
       },
-      SNS_OK_EMAIL: "",
-      SNS_ERROR_EMAIL: "",
     },
     iamRoleStatements: [
       {
