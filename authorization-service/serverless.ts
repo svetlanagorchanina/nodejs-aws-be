@@ -1,6 +1,6 @@
-import type { AWS } from "@serverless/typescript";
+import type { Serverless } from "serverless/aws";
 
-const serverlessConfiguration: AWS = {
+const serverlessConfiguration: Serverless = {
   service: "authorization-service",
   frameworkVersion: "2",
   custom: {
