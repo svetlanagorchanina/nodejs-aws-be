@@ -27,6 +27,16 @@ const serverlessConfiguration: Serverless = {
       handler: "handler.basicAuthorizer",
     },
   },
+  resources: {
+    Resources: {},
+    Outputs: {
+      basicAuthorizerLambdaArn: {
+        Value: {
+          "Fn::GetAtt": ["BasicAuthorizerLambdaFunction", "Arn"],
+        },
+      },
+    },
+  },
 };
 
 module.exports = serverlessConfiguration;

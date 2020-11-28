@@ -17,7 +17,7 @@ export const basicAuthorizer: APIGatewayTokenAuthorizerHandler = (
     const { authorizationToken, methodArn } = event;
     const [authScheme, encodedCreds] = authorizationToken.split(" ");
 
-    if (authScheme !== BASIC_SCHEME) {
+    if (authScheme !== BASIC_SCHEME || !encodedCreds) {
       callback("Unauthorized");
       return;
     }
@@ -33,7 +33,7 @@ export const basicAuthorizer: APIGatewayTokenAuthorizerHandler = (
     callback(null, policy);
   } catch (error) {
     console.log("Error:", error);
-    callback(`Unauthorized: ${error.message}`);
+    callback("Unauthorized");
   }
 };
 
