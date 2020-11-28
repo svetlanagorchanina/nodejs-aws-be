@@ -1,11 +1,11 @@
-import { APIGatewayProxyHandler, APIGatewayProxyResult } from "aws-lambda";
+import { APIGatewayProxyResult } from "aws-lambda";
 import { Pool } from "pg";
 import { withCorsHeaders } from "../../utils/withCorsHeaders";
 import { DB_OPTIONS } from "./options";
 
 let pool;
 
-export const withPgConnection = (handler): APIGatewayProxyHandler => async (
+export const withPgConnection = (handler) => async (
   ...args
 ): Promise<APIGatewayProxyResult> => {
   if (!pool) {
@@ -17,6 +17,7 @@ export const withPgConnection = (handler): APIGatewayProxyHandler => async (
   try {
     return await handler(client, ...args);
   } catch (err) {
+    console.log("Error:", err?.message);
     return withCorsHeaders({
       statusCode: 500,
       body: JSON.stringify({

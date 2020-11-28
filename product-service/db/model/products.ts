@@ -1,5 +1,3 @@
-import { Product } from "../../model/Product";
-
 const dropTable = "drop table if exists products;";
 
 const createTable = `
