@@ -20,7 +20,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "eb:init": "eb init svetlanagorchanina-bff-api --platform node.js --region eu-west-1",
-    "eb:create": "eb create develop-proxy --single --cname svetlanagorchanina-bff-api-develop-proxy --region eu-west-1"
+    "eb:create": "eb create develop-proxy --single --cname svetlanagorchanina-bff-api-develop-proxy --region eu-west-1",
+    "eb:deploy": "eb deploy"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
