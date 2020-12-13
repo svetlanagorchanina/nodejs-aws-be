@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { ProxyController } from './proxy.controller';
 import { ProxyService } from './proxy.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [],
+  imports: [ConfigModule.forRoot(), HttpModule],
   controllers: [ProxyController],
   providers: [ProxyService],
 })
