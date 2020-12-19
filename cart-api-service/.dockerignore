@@ -1,0 +1,23 @@
+# compiled output
+/dist
+/node_modules
+
+# documentation
+README.md
+
+# elastic beanstalk
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# git files
+.git
+.gitignore
+
+# lint files
+.prettierrc
+.eslintrc.js 
+
+# tests
+**/*.spec.ts
+test
