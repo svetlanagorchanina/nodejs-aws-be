@@ -24,3 +24,7 @@ Customer can create order and wait for delivery.
 #### App structure
 
 ![App structure](AppStructure.jpg)
+
+#### Course timetable
+
+https://docs.google.com/spreadsheets/d/1sqRkuaDStMT5TnLiU1GIT4hyDSDn8dYLk892QOo9QRo/edit#gid=0
